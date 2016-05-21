@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "main": "./build/module.js",
   "author": "taky@taky.com",
-  "repository": "douglauer/wegweg",
+  "repository": "punted/wegweg",
   "keywords": [
     "taky"
   ],
