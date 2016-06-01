@@ -273,7 +273,7 @@
       var Redis, parts, _ref;
       Redis = require('ioredis');
       if (uri) {
-        if (!uri.contains('://')) {
+        if (!uri.includes('://')) {
           uri = "redis://" + uri;
         }
         parts = require('url').parse(uri);
@@ -286,7 +286,7 @@
       var Memcached, parts;
       Memcached = require('memcached');
       if (uri) {
-        if (!uri.contains('://')) {
+        if (!uri.includes('://')) {
           uri = "memcached://" + uri;
         }
         parts = url.parse(uri);
