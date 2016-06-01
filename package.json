@@ -1,7 +1,7 @@
 {
   "name": "wegweg",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./build/module.js",
   "author": "taky@taky.com",
   "repository": "punted/wegweg",
