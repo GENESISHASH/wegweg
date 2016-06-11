@@ -228,6 +228,38 @@ module.exports = wegweg = (opt={}) ->
   _.get = (x...) -> needle.get x...
   _.post = (x...) -> needle.post x...
 
+  _.app = ((opt={}) ->
+    express = require 'express'
+
+    app = express()
+    app.disable 'x-powered-by'
+
+    if opt.body_parser
+      body_parser = require 'body-parser'
+
+      app.use body_parser.urlencoded({
+        extended: no
+      })
+
+      app.use body_parser.json()
+
+    app.use (req,res,next) ->
+      if (tmp = req.headers['x-forwarded-for'])
+        req.real_ip = tmp.split(',').shift().trim()
+      else
+        req.real_ip = req.ip
+      next()
+
+    if opt.static
+      val = opt.static
+      val = [val] if _.type(val) is 'string'
+      for dir in val
+        base_dir = _.base(dir)
+        app.use "/#{base_dir}", (require('serve-static')("./#{base_dir}"))
+
+    return app
+  )
+
   return _
 
 if process.env.TAKY_DEV
@@ -248,5 +280,15 @@ if process.env.TAKY_DEV
   await weg.get 'http://example.com', defer e,r
   log e
   log r
+
+  app = weg.app({
+    static: './build'
+    body_parser: yes
+  })
+
+  app.listen 8081
+  log ":8081"
+
+
 
 
