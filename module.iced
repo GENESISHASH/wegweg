@@ -31,7 +31,7 @@ module.exports = wegweg = (opt={}) ->
 
   fs = require 'fs'
 
-  _.reads = fs.readFileSync
+  _.reads = (x) -> fs.readFileSync(x).toString()
   _.writes = fs.writeFileSync
 
   _.base = require('path').basename
@@ -260,6 +260,25 @@ module.exports = wegweg = (opt={}) ->
     return app
   )
 
+  _.minify = ((code) ->
+    Ugly = require 'uglify-js'
+
+    toplevel = Ugly.parse code, toplevel:toplevel
+    toplevel.figure_out_scope()
+
+    compressor = Ugly.Compressor {warnings:no}
+    toplevel = toplevel.transform compressor
+
+    toplevel.figure_out_scope()
+    toplevel.compute_char_frequency()
+    toplevel.mangle_names {}
+
+    stream = Ugly.OutputStream {}
+    toplevel.print stream
+
+    stream.toString() + ''
+  )
+
   return _
 
 if process.env.TAKY_DEV
@@ -281,6 +300,7 @@ if process.env.TAKY_DEV
   log e
   log r
 
+  ###
   app = weg.app({
     static: './build'
     body_parser: yes
@@ -288,7 +308,6 @@ if process.env.TAKY_DEV
 
   app.listen 8081
   log ":8081"
-
-
-
+  ###
+  log _.minify(_.reads './build/module.js')
 
