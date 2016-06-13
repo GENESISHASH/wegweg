@@ -350,14 +350,14 @@
       }
     };
     _.memcached = _.memcache = _.mem = function(uri) {
-      var Memcached, parts;
+      var Memcached, parts, _ref;
       Memcached = require('memcached');
       if (uri) {
         if (!uri.includes('://')) {
           uri = "memcached://" + uri;
         }
-        parts = url.parse(uri);
-        return new Memcached("" + parts.hostname + ":" + (parts.port || '11211'));
+        parts = require('url').parse(uri);
+        return new Memcached("" + parts.hostname + ":" + ((_ref = parts.port) != null ? _ref : '11211'));
       } else {
         return new Memcached("localhost:11211");
       }
