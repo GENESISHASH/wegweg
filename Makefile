@@ -13,3 +13,7 @@ r:
 	$(MAKE)
 	node build/module.js
 
+test:
+	$(MAKE)
+	iced module.iced
+

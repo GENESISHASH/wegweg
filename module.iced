@@ -143,6 +143,55 @@ module.exports = wegweg = (opt={}) ->
     ec = require('easycrypto').getInstance()
     JSON.parse ec.decrypt(x, salt or '2reh9zmtlsfy5gbi')
 
+  _.mongo = _.mongodb = ((uri) ->
+    mongo = require 'mongojs'
+
+    db = mongo uri
+    db.uri = do ->
+      obj = _.parse_uri uri
+      if uri.match '@'
+        up = uri.split('@')[0] + '@'
+      else
+        up = ''
+      database = uri.split('/').pop()
+      "mongodb://#{up}#{obj.hostname}:#{obj.port or 27017}#{'/' + database or ''}"
+
+    db.mid = (str) ->
+      if _.isString str
+        return mongo.ObjectId str
+      str
+
+    db.find = (coll,options...,cb) ->
+      [query,fields,extra] = options
+      db.collection(coll).find(query or {}, fields or [], cb)
+
+    db.findOne = (coll,options...,cb) ->
+      [query,fields,extra] = options
+      if query?._id? then query._id = mongo.ObjectId query._id
+      db.collection(coll).findOne (query or {}), fields or [], extra or {}, cb
+
+    db.insert = (coll,doc,cb) ->
+      db.collection(coll).insert doc, cb
+
+    db.update = (coll,options...,cb) ->
+      [query,update,extra] = options
+      db.collection(coll).update (query or {}), update or {}, extra or {}, cb
+
+    db.count = (coll,options...,cb) ->
+      [query] = options
+      db.collection(coll).count (query or {}), cb
+
+    db.remove = (coll,options...,cb) ->
+      [query,just_one] = options
+      db.collection(coll).remove (query or {}), just_one or false, cb
+
+    db.distinct = (coll,field,options...,cb) ->
+      [extra] = options
+      db.collection(coll).distinct field, extra or {}, cb
+
+    db
+  )
+
   _.redis = (uri) ->
     Redis = require 'ioredis'
 
@@ -279,6 +328,15 @@ module.exports = wegweg = (opt={}) ->
     stream.toString() + ''
   )
 
+  _.parse_uri = ((uri) ->
+    if num = parseInt(uri) > 1
+      return {hostname:'localhost',port:uri}
+    if !uri.includes('://')
+      uri = "lala://#{uri}"
+    parts = require('url').parse uri
+    {hostname:parts.hostname,port:parts.port}
+  )
+
   return _
 
 if process.env.TAKY_DEV
@@ -309,5 +367,9 @@ if process.env.TAKY_DEV
   app.listen 8081
   log ":8081"
   ###
-  log _.minify(_.reads './build/module.js')
+  
+  log weg.minify(_.reads './build/module.js')
+
+  db = weg.mongo 'localhost/wegweg-test'
+  log weg.fns(db)
 
