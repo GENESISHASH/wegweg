@@ -196,7 +196,7 @@ module.exports = wegweg = (opt={}) ->
     Redis = require 'ioredis'
 
     if uri
-      uri = "redis://#{uri}" if !uri.includes '://'
+      uri = "redis://#{uri}" if !uri.includes('://')
       parts = require('url').parse uri
       new Redis (parts.port ? 6379), parts.hostname
     else
@@ -206,9 +206,9 @@ module.exports = wegweg = (opt={}) ->
     Memcached = require 'memcached'
 
     if uri
-      uri = "memcached://#{uri}" if !uri.includes '://'
-      parts = url.parse uri
-      new Memcached "#{parts.hostname}:#{parts.port or '11211'}"
+      uri = "memcached://#{uri}" if !uri.includes('://')
+      parts = require('url').parse uri
+      new Memcached "#{parts.hostname}:#{parts.port ? '11211'}"
     else
       new Memcached "localhost:11211"
 
