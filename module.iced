@@ -337,6 +337,19 @@ module.exports = wegweg = (opt={}) ->
     {hostname:parts.hostname,port:parts.port}
   )
 
+  _.emitter = _.events = _.eve = (->
+    EventEmitter2 = require('eventemitter2').EventEmitter2
+
+    opt =
+      wildcard: yes
+      delimiter: ':'
+      maxListeners: 9999
+
+    emitter = new EventEmitter2 opt
+    emitter.setMaxListeners 9999
+    emitter
+  )
+
   return _
 
 if process.env.TAKY_DEV

@@ -536,6 +536,18 @@
         port: parts.port
       };
     });
+    _.emitter = _.events = _.eve = (function() {
+      var EventEmitter2, emitter;
+      EventEmitter2 = require('eventemitter2').EventEmitter2;
+      opt = {
+        wildcard: true,
+        delimiter: ':',
+        maxListeners: 9999
+      };
+      emitter = new EventEmitter2(opt);
+      emitter.setMaxListeners(9999);
+      return emitter;
+    });
     return _;
   };
 
@@ -565,7 +577,7 @@
               return r = arguments[1];
             };
           })(),
-          lineno: 356
+          lineno: 369
         }));
         __iced_deferrals._fulfill();
       });
