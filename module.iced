@@ -350,6 +350,35 @@ module.exports = wegweg = (opt={}) ->
     emitter
   )
 
+  _.ucfirst = ((str) ->
+    if str and str isnt ''
+      str.slice(0,1).toUpperCase() + str.slice(1,str.length)
+  )
+
+  _.ucwords = ((str) ->
+    if str? and str isnt ''
+      arr = str.split ' '
+      w = ''; for x in arr
+        w += x.slice(0,1).toUpperCase() + x.slice(1,x.length) + ' '
+      w.trim()
+  )
+
+  _.uri_title = ((str,dash,max_len) ->
+    if !dash then dash = '-'
+    if !max_len then max_len = 50
+
+    str = str.toLowerCase().trim()
+    str = str.replace /[^a-z0-9]/g, ' '
+
+    while str.includes('  ')
+      str = str.replace '  ', ' '
+
+    if str.length > max_len
+      str = str.slice(0,max_len)
+
+    str.trim().replace /\s/g, dash
+  )
+
   return _
 
 if process.env.TAKY_DEV
@@ -385,4 +414,8 @@ if process.env.TAKY_DEV
 
   db = weg.mongo 'localhost/wegweg-test'
   log weg.fns(db)
+
+  log weg.ucfirst('john')
+  log weg.ucwords('john smith')
+  log weg.uri_title('john smith\'s newest fantastic post')
 

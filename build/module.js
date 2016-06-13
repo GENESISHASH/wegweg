@@ -548,6 +548,40 @@
       emitter.setMaxListeners(9999);
       return emitter;
     });
+    _.ucfirst = (function(str) {
+      if (str && str !== '') {
+        return str.slice(0, 1).toUpperCase() + str.slice(1, str.length);
+      }
+    });
+    _.ucwords = (function(str) {
+      var arr, w, x, _i, _len;
+      if ((str != null) && str !== '') {
+        arr = str.split(' ');
+        w = '';
+        for (_i = 0, _len = arr.length; _i < _len; _i++) {
+          x = arr[_i];
+          w += x.slice(0, 1).toUpperCase() + x.slice(1, x.length) + ' ';
+        }
+        return w.trim();
+      }
+    });
+    _.uri_title = (function(str, dash, max_len) {
+      if (!dash) {
+        dash = '-';
+      }
+      if (!max_len) {
+        max_len = 50;
+      }
+      str = str.toLowerCase().trim();
+      str = str.replace(/[^a-z0-9]/g, ' ');
+      while (str.includes('  ')) {
+        str = str.replace('  ', ' ');
+      }
+      if (str.length > max_len) {
+        str = str.slice(0, max_len);
+      }
+      return str.trim().replace(/\s/g, dash);
+    });
     return _;
   };
 
@@ -577,7 +611,7 @@
               return r = arguments[1];
             };
           })(),
-          lineno: 369
+          lineno: 398
         }));
         __iced_deferrals._fulfill();
       });
@@ -597,7 +631,10 @@
          */
         log(weg.minify(_.reads('./build/module.js')));
         db = weg.mongo('localhost/wegweg-test');
-        return __iced_k(log(weg.fns(db)));
+        log(weg.fns(db));
+        log(weg.ucfirst('john'));
+        log(weg.ucwords('john smith'));
+        return __iced_k(log(weg.uri_title('john smith\'s newest fantastic post')));
       };
     })(this));
   } else {
