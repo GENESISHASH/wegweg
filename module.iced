@@ -379,6 +379,11 @@ module.exports = wegweg = (opt={}) ->
     str.trim().replace /\s/g, dash
   )
 
+  _.pixel = (->
+    p = 'R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+    new Buffer p, 'base64'
+  )
+
   return _
 
 if process.env.TAKY_DEV
@@ -409,7 +414,7 @@ if process.env.TAKY_DEV
   app.listen 8081
   log ":8081"
   ###
-  
+
   log weg.minify(_.reads './build/module.js')
 
   db = weg.mongo 'localhost/wegweg-test'

@@ -582,6 +582,11 @@
       }
       return str.trim().replace(/\s/g, dash);
     });
+    _.pixel = (function() {
+      var p;
+      p = 'R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+      return new Buffer(p, 'base64');
+    });
     return _;
   };
 
@@ -611,7 +616,7 @@
               return r = arguments[1];
             };
           })(),
-          lineno: 398
+          lineno: 403
         }));
         __iced_deferrals._fulfill();
       });
