@@ -4,7 +4,7 @@
   "version": "0.10.0",
   "main": "./build/module.js",
   "author": "taky@taky.com",
-  "repository": "punted/wegweg",
+  "repository": "tosadvisor/wegweg",
   "keywords": [
     "taky"
   ],
