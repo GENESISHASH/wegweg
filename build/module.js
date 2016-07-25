@@ -135,7 +135,9 @@
       }
       return Object.prototype.toString.call(o).slice(8, -1).toLowerCase();
     };
-    _.uuid = require('time-uuid');
+    _.uuid = function() {
+      return (require('shortid')).generate();
+    };
     _.stats = fs.statSync;
     _.exists = fs.existsSync;
     _.md5 = function(x) {
@@ -623,7 +625,7 @@
     })(this)((function(_this) {
       return function() {
         log(e);
-        log(r);
+        log(r.body);
 
         /*
         app = weg.app({

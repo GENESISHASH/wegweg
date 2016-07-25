@@ -51,7 +51,7 @@ module.exports = wegweg = (opt={}) ->
 
   _.in = (str,fn) ->
     result = require('english-time-mirror')(str)
-    setTimeout fn,result
+    (setTimeout fn,result)
 
   _.secs = _.seconds = (str) ->
     result = require('english-time-mirror')(str)
@@ -61,7 +61,7 @@ module.exports = wegweg = (opt={}) ->
     return no if o in ['undefined',null]
     Object::toString.call(o).slice(8,-1).toLowerCase()
 
-  _.uuid = require 'time-uuid'
+  _.uuid = -> (require 'shortid').generate()
 
   _.stats = fs.statSync
   _.exists = fs.existsSync
@@ -381,7 +381,7 @@ module.exports = wegweg = (opt={}) ->
 
   _.pixel = (->
     p = 'R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-    new Buffer p, 'base64'
+    (new Buffer p, 'base64')
   )
 
   return _
@@ -403,7 +403,7 @@ if process.env.TAKY_DEV
 
   await weg.get 'http://example.com', defer e,r
   log e
-  log r
+  log r.body
 
   ###
   app = weg.app({
