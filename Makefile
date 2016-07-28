@@ -7,7 +7,7 @@ main:
 			rm -rf build/ ; \
 	fi;
 	mkdir build
-	iced -c --runtime inline --output build module.iced
+	iced -c --runtime inline --output build src
 
 r:
 	$(MAKE)
@@ -15,5 +15,5 @@ r:
 
 test:
 	$(MAKE)
-	iced module.iced
+	iced src/module.iced
 

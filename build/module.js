@@ -609,7 +609,7 @@
     (function(_this) {
       return (function(__iced_k) {
         __iced_deferrals = new iced.Deferrals(__iced_k, {
-          filename: "/Users/douglaslauer/www/wegweg/module.iced"
+          filename: "/Users/douglaslauer/www/wegweg/src/module.iced"
         });
         weg.get('http://example.com', __iced_deferrals.defer({
           assign_fn: (function() {
