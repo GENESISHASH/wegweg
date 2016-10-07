@@ -340,7 +340,7 @@
     });
     _.redis = function(uri) {
       var Redis, parts, _ref;
-      Redis = require('redis');
+      Redis = require('ioredis');
       if (uri) {
         if (!uri.includes('://')) {
           uri = "redis://" + uri;

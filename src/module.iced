@@ -193,7 +193,7 @@ module.exports = wegweg = (opt={}) ->
   )
 
   _.redis = (uri) ->
-    Redis = require 'redis'
+    Redis = require 'ioredis'
 
     if uri
       uri = "redis://#{uri}" if !uri.includes('://')
