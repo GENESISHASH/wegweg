@@ -193,12 +193,12 @@ module.exports = wegweg = (opt={}) ->
   )
 
   _.redis = (uri) ->
-    Redis = require 'ioredis'
+    Redis = require 'redis'
 
     if uri
       uri = "redis://#{uri}" if !uri.includes('://')
       parts = require('url').parse uri
-      new Redis (parts.port ? 6379), parts.hostname, {lazyConnect: true}
+      new Redis (parts.port ? 6379), parts.hostname
     else
       new Redis
 

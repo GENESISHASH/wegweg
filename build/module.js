@@ -340,15 +340,13 @@
     });
     _.redis = function(uri) {
       var Redis, parts, _ref;
-      Redis = require('ioredis');
+      Redis = require('redis');
       if (uri) {
         if (!uri.includes('://')) {
           uri = "redis://" + uri;
         }
         parts = require('url').parse(uri);
-        return new Redis((_ref = parts.port) != null ? _ref : 6379, parts.hostname, {
-          lazyConnect: true
-        });
+        return new Redis((_ref = parts.port) != null ? _ref : 6379, parts.hostname);
       } else {
         return new Redis;
       }
