@@ -1,7 +1,7 @@
 {
   "name": "wegweg",
   "description": "",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "main": "./build/module.js",
   "author": "taky@taky.com",
   "repository": "tosadvisor/wegweg",
