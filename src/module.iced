@@ -280,7 +280,8 @@ module.exports = wegweg = (opt={}) ->
   _.app = ((opt={}) ->
     express = require 'express'
 
-    app = express()
+    # allow passing of preexisting express instance
+    app = opt.app ? opt.express ? express()
     app.disable 'x-powered-by'
 
     if opt.body_parser
