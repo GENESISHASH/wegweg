@@ -2,6 +2,8 @@
 require('iced-coffee-script').register()
 _ = require 'lodash'
 
+root = global ? root
+
 module.exports = wegweg = (opt={}) ->
 
   unless (opt?.globals? and opt.globals is false)
