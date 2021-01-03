@@ -1,19 +1,22 @@
 # vim: set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 require('iced-coffee-script').register()
-_ = require 'lodash'
+process.setMaxListeners 0
 
-root = global ? root
+_ = require 'lodash'
+easy_crypto = require './lib/easy-crypto'
+
+if !root then root = global
 
 module.exports = wegweg = (opt={}) ->
 
-  unless (opt?.globals? and opt.globals is false)
-    process.setMaxListeners 0
-
+  # globals
+  if opt.globals? and opt.globals
     root.log ?= (x...) -> try console.log x...
 
-    unless (opt?.shelljs? and opt.shelljs is false)
-      require 'shelljs/global'
+  if opt.shelljs? and opt.shelljs
+    require 'shelljs/global'
 
+  # convience lodash
   _.cmap = (x...) ->
     _.compact _.map x...
 
@@ -22,6 +25,7 @@ module.exports = wegweg = (opt={}) ->
   _.ucmap = (x...) ->
     _.unique _.compact _.map x...
 
+  # async helpers
   async = _.async = require 'async'
 
   _.par = async.parallel
@@ -31,6 +35,7 @@ module.exports = wegweg = (opt={}) ->
   _.fns = _.functions
   _.vals = _.values
 
+  # file functions
   fs = require 'fs'
 
   _.reads = (x) -> fs.readFileSync(x).toString()
@@ -68,8 +73,14 @@ module.exports = wegweg = (opt={}) ->
   _.stats = fs.statSync
   _.exists = fs.existsSync
 
+  # hashing/encoding
   _.md5 = (x) ->
     c = require('crypto').createHash 'md5'
+    c.update x
+    c.digest 'hex'
+
+  _.sha256 = (x) ->
+    c = require('crypto').createHash 'sha256'
     c.update x
     c.digest 'hex'
 
@@ -138,12 +149,14 @@ module.exports = wegweg = (opt={}) ->
   _.is_email = (x) -> (/\S+@\S+\.\S+/).test x
 
   _.enc = (x,salt) ->
-    ec = require('easycrypto').getInstance()
-    ec.encrypt JSON.stringify(x), salt or '2reh9zmtlsfy5gbi'
+    ec = easy_crypto.getInstance()
+    res = ec.encrypt JSON.stringify(x), salt or '2reh9zmtlsfy5gbi'
+    return res
 
   _.dec = (x,salt) ->
-    ec = require('easycrypto').getInstance()
-    JSON.parse ec.decrypt(x, salt or '2reh9zmtlsfy5gbi')
+    ec = easy_crypto.getInstance()
+    res = JSON.parse ec.decrypt(x, salt or '2reh9zmtlsfy5gbi')
+    return res
 
   _.mongo = _.mongodb = ((uri) ->
     mongo = require 'mongojs'
@@ -390,20 +403,23 @@ module.exports = wegweg = (opt={}) ->
   return _
 
 if process.env.TAKY_DEV
-  console.log '---'
+  log = (x...) -> console.log x...
 
   weg = wegweg()
 
-  log weg.seconds '3 days'
-  log weg.base '/wojf/wefoj/wefoj.png'
-  log weg.uuid()
-  log weg.mime 'image.png'
-  log weg.enc 'hello'
-  log (weg.cmap [1,2,3,4,5], (x) ->
+  log /seconds/, weg.seconds '3 days'
+  log /base/, weg.base '/wojf/wefoj/wefoj.png'
+  log /uuid/, weg.uuid()
+  log /mimetype/, weg.mime 'image.png'
+  log /encryption/, encd = weg.enc 'hello'
+  log /decryption/, decd = weg.dec encd
+
+  log /cmap/, (weg.cmap [1,2,3,4,5], (x) ->
     if x in [1,2,3] then return null
     x
   )
 
+  log /getting url/
   await weg.get 'http://example.com', defer e,r
   log e
   log r.body
@@ -418,12 +434,17 @@ if process.env.TAKY_DEV
   log ":8081"
   ###
 
-  log weg.minify(_.reads './build/module.js')
+  log /minify/, weg.minify(_.reads './../build/module.js')
 
+  ###
   db = weg.mongo 'localhost/wegweg-test'
   log weg.fns(db)
+  ###
 
-  log weg.ucfirst('john')
-  log weg.ucwords('john smith')
-  log weg.uri_title('john smith\'s newest fantastic post')
+  log /ucfirst/, weg.ucfirst('john')
+  log /ucwords/, weg.ucwords('john smith')
+  log /uri_title/, weg.uri_title('john smith\'s newest fantastic post')
+  log /md5/, weg.md5('ayy')
+  log /sha256/, weg.sha256('ayy')
+
 
