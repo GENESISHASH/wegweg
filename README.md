@@ -21,4 +21,5 @@ var _ = require('wegweg')({
 - [x] `time-uuid ` needs removed
 - [x] `easycrypto` needs removed
 - [ ] build should work in browser
+- [ ] update `mongojs`
 
