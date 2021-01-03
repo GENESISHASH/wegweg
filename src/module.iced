@@ -5,7 +5,11 @@ process.setMaxListeners 0
 _ = require 'lodash'
 easy_crypto = require './lib/easy-crypto'
 
-if !root then root = global
+if !root
+  if global
+    root = global
+  else if window
+    root = window
 
 module.exports = wegweg = (opt={}) ->
 

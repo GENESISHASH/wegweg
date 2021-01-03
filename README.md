@@ -18,5 +18,7 @@ var _ = require('wegweg')({
 ```
 
 # @todo
-- `time-uuid ` needs removed
+- [x] `time-uuid ` needs removed
+- [x] `easycrypto` needs removed
+- [ ] build should work in browser
 
