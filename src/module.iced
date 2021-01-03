@@ -423,32 +423,30 @@ if process.env.TAKY_DEV
     x
   )
 
-  log /getting url/
   await weg.get 'http://example.com', defer e,r
-  log e
-  log r.body
+  log /_.get e/, e
+  log /_.get r/, r.body.substr(0,500) + '..'
 
-  ###
   app = weg.app({
     static: './build'
     body_parser: yes
   })
 
   app.listen 8081
-  log ":8081"
-  ###
+  log /express/, ":8081"
 
-  log /minify/, weg.minify(_.reads './../build/module.js')
+  log /minify/, weg.minify(_.reads __dirname + '/../build/module.js').substr(0,500) + '..'
 
-  ###
   db = weg.mongo 'localhost/wegweg-test'
-  log weg.fns(db)
-  ###
+  log /db/, weg.fns(db)
 
   log /ucfirst/, weg.ucfirst('john')
   log /ucwords/, weg.ucwords('john smith')
   log /uri_title/, weg.uri_title('john smith\'s newest fantastic post')
   log /md5/, weg.md5('ayy')
   log /sha256/, weg.sha256('ayy')
+
+  log /finished/
+  process.exit 0
 
 
